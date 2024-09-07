@@ -1,15 +1,12 @@
-using DemoIDP;
 using Identity_Server;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using MvcClient;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var cs = builder.Configuration.GetConnectionString("MainConnection");
-string migrationAssembly = Assembly.GetExecutingAssembly().GetName().Name;
+string? migrationAssembly = Assembly.GetExecutingAssembly().GetName().Name;
 
 builder
     .Services
@@ -51,11 +48,6 @@ builder.Services.AddIdentityServer()
     .AddInMemoryClients(Configuration.GetClients())
     .AddDeveloperSigningCredential()
     .AddProfileService<IdentityProfileService>();
-
-if (builder.Configuration.GetValue<bool>("SeedData"))
-{
-    SeedData.EnsureSeedData(cs);
-}
 
 builder.Services.AddCors(options =>
 {
